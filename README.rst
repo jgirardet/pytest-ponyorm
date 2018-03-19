@@ -14,10 +14,6 @@ pytest-ponyorm
     :target: https://travis-ci.org/jgirardet/pytest-ponyorm
     :alt: See Build Status on Travis CI
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/jgirardet/pytest-ponyorm?branch=master
-    :target: https://ci.appveyor.com/project/jgirardet/pytest-ponyorm/branch/master
-    :alt: See Build Status on AppVeyor
-
 PonyORM in Pytest
 
 ----
