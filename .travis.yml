@@ -39,3 +39,4 @@ deploy:
   on:
     tags: true
     repo: jgirardet/pytest-ponyorm
+    condition: $MY_ENV = TOX_ENV=py35
