@@ -13,7 +13,7 @@ def read(fname):
 
 setup(
     name='pytest-ponyorm',
-    version='0.2.4',
+    version='0.2.5',
     author='Jimmy Girardet',
     author_email='ijkl@netc.fr',
     maintainer='Jimmy Girardet',
