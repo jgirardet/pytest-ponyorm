@@ -48,5 +48,4 @@ def pytest_runtest_setup(item):
             # rest db before running test
             db = ponydb(item)
             db.drop_all_tables(with_all_data=True)
-            print('dop_create')
             db.create_tables()
