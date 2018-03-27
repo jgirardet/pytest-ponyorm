@@ -13,7 +13,7 @@ def read(fname):
 
 setup(
     name='pytest-ponyorm',
-    version='0.2.3',
+    version='0.2.7',
     author='Jimmy Girardet',
     author_email='ijkl@netc.fr',
     maintainer='Jimmy Girardet',
@@ -23,7 +23,7 @@ setup(
     description='PonyORM in Pytest',
     long_description=read('README.rst'),
     py_modules=['pytest_ponyorm'],
-    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
+    python_requires='python>=3.5',
     install_requires=['pytest>=3.1.1'],
     classifiers=[
         'Framework :: Pytest',
