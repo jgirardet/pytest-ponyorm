@@ -23,7 +23,7 @@ setup(
     description='PonyORM in Pytest',
     long_description=read('README.rst'),
     py_modules=['pytest_ponyorm'],
-    python_requires='python>=3.5',
+    python_requires='>=3.5',
     install_requires=['pytest>=3.1.1'],
     classifiers=[
         'Framework :: Pytest',
