@@ -94,7 +94,9 @@ The marker *pony* takes one argument : *reset_db*, default is True. In this case
 
     # test3 will use database in the state that test2 left it.
 
-
+About Fixtures :
+-----------------
+Fixtures should not use db_session decorator or context manager. Each test is automaticaly run inside a db_session  and each operation inside fixtures will be commited at test start.
 
 Contributing
 ------------
@@ -111,6 +113,15 @@ Issues
 ------
 
 If you encounter any problems, please `file an issue`_ along with a detailed description.
+
+
+Changelog
+----------
+0.2.9 : add fixture autocommit before run test
+0.2.0 : add marker
+0.1.5 : add db_session for each test
+0.1.0 : auto clear database
+
 
 .. _`Cookiecutter`: https://github.com/audreyr/cookiecutter
 .. _`@hackebrot`: https://github.com/hackebrot
