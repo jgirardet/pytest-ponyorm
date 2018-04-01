@@ -49,3 +49,10 @@ def pytest_runtest_setup(item):
             db = ponydb(item)
             db.drop_all_tables(with_all_data=True)
             db.create_tables()
+
+
+def pytest_runtest_call(item):
+
+    marker = item.get_marker('pony')
+    if marker:
+        orm.commit()

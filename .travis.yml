@@ -26,13 +26,3 @@ cache:
 
 # After you create the Github repo and add it to Travis, run the
 # travis_pypi_setup.py script to finish PyPI deployment setup
-deploy:
-  provider: pypi
-  user: jgirardet
-  distributions: sdist bdist_wheel
-  password: 
-    secure: 'A8zEqFlS++qH2JnYD0jQnpaOus7ccpKir/nssYwtVBOzsqtp5URpsdhkbleOqoIvEq0gFfmPwZsxQWpkqFxSeFsrXwwFUFBTTYnJ68YIy7LrkfHq8fpAHS7X1usx0DSqDExnZJQirDrudOHEdgV3rXxw3a56Dgq0IAGd4X1ySozcre/IyTMKL8osNnPbkPaFPydeaZbCEuHzanCQSFmV3EUSWv6BsIlRYWZXtdjGXNWLLFk1ysH8M4eUK94fIwiEs6eDFYAuWUDaGcaCcNsUHG25koXI60lTjxdzYvF8slaWr/OmcOYzgqYzFyi9rgDRpuDOBxipz/m79xGbgwcHCpohII6QNnONX5GnHiwb1P5Z+XXLdV/i/9oR6FLOghFdHjM8+xyBfCHfP5cRFACRjJWHP5lJZmaL0K+mMUzTTHdupBj9SBcJ+RNfFbzh3uaILlBVl5frJHF0ZdAogWyl5BVWy824PiLdbIDv9dDz6037sIe4wH8AjgY01x3MMNBBmYOoljsIt2yf20R71mJl0qpI9K05UGfiPghVb5eRvbCqTsMJt+rGfUFdy0+aBN17EBIjRYw/QpoO1vuVz13qTeL9juqpkCByMsvbCeJQ5RsQLkOs8ldpftECf7HZqA8AEacyTNP3ZX0gRrf+nRM4A/h46Xur+GeDf57ZX7qlJzU='
-  on:
-    tags: true
-    repo: jgirardet/pytest-ponyorm
-    condition: TOX_ENV=py35

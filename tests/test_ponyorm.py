@@ -184,3 +184,37 @@ def test_pony_marker_dont_drop_table(testdir):
 
     # make sure that that we get a '0' exit code for the testsuite
     assert result.ret == 0
+
+
+def test_plugin_commit_fiture_before_test(testdir):
+    testdir.makeini("""
+        [pytest]
+        PONY_DB=tests.app
+    """)
+
+    testdir.makepyfile("""
+        import pytest
+        from tests.app import db
+        from pony import orm
+
+        # @orm.db_session
+        @pytest.fixture(scope='function')
+        def fixt(request):
+            a = db.Bla(name="hello")
+            # a.flush()
+            return a
+
+        @pytest.mark.pony
+        def test_1(fixt):
+            assert fixt.id == 1
+    """)
+
+    result = testdir.runpytest('-v')
+
+    # fnmatch_lines does an assertion internally
+    result.stdout.fnmatch_lines([
+        '*::test_1 PASSED*',
+    ])
+
+    # make sure that that we get a '0' exit code for the testsuite
+    assert result.ret == 0
