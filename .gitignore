@@ -74,3 +74,8 @@ target/
 Pipfile
 Pipfile.lock
 .pytest_cache/
+
+# sublime 
+*.sublime-project
+*.sublime-workspace
+db.sqlite

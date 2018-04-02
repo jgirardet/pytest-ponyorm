@@ -8,21 +8,19 @@ class Bla(db.Entity):
     champs = orm.Optional(str)
     bles = orm.Set('Ble')
 
-
-# db_params = dict(
-#     provider="postgres",
-#     host="localhost",
-#     database="mapistar3",
-#     user="j",
-#     password="j",
-#     port=5432,
-#     # create_tables=True,
-# )
+    def update(self):
+        self.champs = "LALA"
 
 
 class Ble(db.Entity):
     name = orm.Required(str)
     bla = orm.Required(Bla)
+
+    # def after_insert(self):
+    #     self.bla.update()
+
+    def before_delete(self):
+        self.bla.update()
 
 
 db.bind(provider='sqlite', filename=':memory:')

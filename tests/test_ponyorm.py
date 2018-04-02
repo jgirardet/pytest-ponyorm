@@ -40,7 +40,7 @@ def test_ponydb_(testdir):
         import tests.app
 
         def test_ponydb(ponydb):
-            assert ponydb
+            assert ponydb.entities['Bla']
     """)
     result = testdir.runpytest('-v')
 
@@ -190,16 +190,17 @@ def test_pony_marker_dont_drop_table(testdir):
 
         pytestmark = pytest.mark.pony
 
+        @pytest.mark.pony(reset_db=False)
         def test_1():
             a = db.Bla(name="omkmok")
             a = db.Bla(name="omkmok")
             a = db.Bla(name="omkmok")
             assert db.Bla.select().count() == 3
 
-        @pytest.mark.pont(reset_db=False)
-        def test_2():
+        def test_2(request):
+            print(request.node.get_marker('pony'))
             a = db.Bla(name="omkmok")
-            assert db.Bla.select().count() == 1
+            assert db.Bla.select().count() == 4
     """)
 
     result = testdir.runpytest('-v')
@@ -210,7 +211,7 @@ def test_pony_marker_dont_drop_table(testdir):
         '*::test_2 PASSED*',
     ])
 
-    # make sure that that we get a '0' exit code for the testsuite
+    # # make sure that that we get a '0' exit code for the testsuite
     assert result.ret == 0
 
 

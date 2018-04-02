@@ -35,7 +35,7 @@ Features
 Requirements
 ------------
 
-Tested from `Pony ORM`_ >= '0.7.3' 
+Tested from `Pony ORM`_ >= '0.7.3' and python : 3.5, 3.6
 
 
 Installation
@@ -51,7 +51,7 @@ You can install "pytest-ponyorm" via `pip`_ from `PyPI`_::
 Usage
 -----
 
-.. warning:: By default, database is cleared after each test. You must never use it in a production environnement. This plugin doesn't change the database config.It's you'job to create the testing environnement and change database params. You may use _`pytest-env` to add environnement variable at pytest run, and check this in your code to set testing environnement.
+.. warning:: By default, database is cleared after each test. You must never use it in a production environnement. This plugin doesn't change the database config.It's you'job to create the testing environnement and change database params.
 
 First, configure PONY_DB in pytest.ini. PonyORM main Database instance  module location must be specified in pytest.ini to make it work : for example if db is in /path/models/main.py, you must configure like this :
 
@@ -65,6 +65,7 @@ Then just apply the pony marker :
 .. code-block:: python
 
     # models.py
+
     db = Database()
 
     # test.py
@@ -75,7 +76,7 @@ Then just apply the pony marker :
 
 You can mark a class or function with @pytest.mark.pony or the whole module with pytestmark = pytest.mark.pony
 
-The marker *pony* takes one argument : *reset_db*, default is True. In this case the marked test doesn't reset the database before running.
+The marker *pony* takes one argument : *reset_db*, default is True. In this case the marked test doesn't reset the database at ending.
 
 .. code-block:: python
 	
@@ -94,14 +95,23 @@ The marker *pony* takes one argument : *reset_db*, default is True. In this case
 
     # test3 will use database in the state that test2 left it.
 
+About Reseting Database:
+-------------------------
+Test database tables are dropped/recreate before the test SESSION.
+
+Initialy this plugin did drop/recreate table  for each test. Due tu perfomance reason, this has changed. Now tables are cleared but not dropped. This means that some things like auto PrimaryKey won't start at 1 for each test. This has to be considered when writing tests.
+
+
 About Fixtures :
 -----------------
 Fixtures should not use db_session decorator or context manager. Each test is automaticaly run inside a db_session  and each operation inside fixtures will be commited at test start.
+
 
 Contributing
 ------------
 Contributions are very welcome. Tests can be run with `tox`_, please ensure
 the coverage at least stays the same before you submit a pull request.
+
 
 License
 -------
@@ -117,6 +127,10 @@ If you encounter any problems, please `file an issue`_ along with a detailed des
 
 Changelog
 ----------
+0.3.0 :     
+    - made faster with just deleting database entries after each test
+    - no drop/recreate
+    - db_session splitted into 2 hooks, not anymore in a fixture
 0.2.9 : add fixture autocommit before run test
 0.2.0 : add marker
 0.1.5 : add db_session for each test
