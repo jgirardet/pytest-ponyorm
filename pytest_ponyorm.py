@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import pytest
 import importlib
+import pytest
 from pony import orm
 
 
