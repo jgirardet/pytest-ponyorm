@@ -81,7 +81,8 @@ def pytest_runtest_teardown(item, nextitem):
     db = importlib.import_module(db_path).db
 
     if marker:
-        orm.commit()
+        # orm.commit()
         for entity in db.entities.values():
-            entity.select().delete(bulk=True)
+            [e.delete() for e in entity.select()[:]]
         orm.db_session.__exit__()
+        # with orm.db_session():

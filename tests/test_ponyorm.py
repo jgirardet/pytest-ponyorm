@@ -124,7 +124,8 @@ def test_pony_marker_apply_db_session(testdir):
 
         def test_marker_apply_db_session():
             a = db.Bla(name="omkmok")
-            assert a.to_dict() == {'id':1, 'name':"omkmok"}
+            a.flush()
+            assert a.id is not None
     """)
 
     result = testdir.runpytest('-v')
@@ -176,41 +177,41 @@ def test_pony_marker_drop_table(testdir):
     assert result.ret == 0
 
 
-# def test_pony_marker_dont_drop_table(testdir):
-#     testdir.makeini("""
-#         [pytest]
-#         PONY_DB=tests.app
-#     """)
+def test_pony_marker_dont_drop_table(testdir):
+    testdir.makeini("""
+        [pytest]
+        PONY_DB=tests.app
+    """)
 
-#     testdir.makepyfile("""
-#         import pytest
-#         from tests.app import db
-#         from pony import orm
+    testdir.makepyfile("""
+        import pytest
+        from tests.app import db
+        from pony import orm
 
-#         pytestmark = pytest.mark.pony
+        pytestmark = pytest.mark.pony
 
-#         def test_1():
-#             a = db.Bla(name="omkmok")
-#             a = db.Bla(name="omkmok")
-#             a = db.Bla(name="omkmok")
-#             assert db.Bla.select().count() == 3
+        def test_1():
+            a = db.Bla(name="omkmok")
+            a = db.Bla(name="omkmok")
+            a = db.Bla(name="omkmok")
+            assert db.Bla.select().count() == 3
 
-#         @pytest.mark.pont(reset_db=False)
-#         def test_2():
-#             a = db.Bla(name="omkmok")
-#             assert db.Bla.select().count() == 1
-#     """)
+        @pytest.mark.pont(reset_db=False)
+        def test_2():
+            a = db.Bla(name="omkmok")
+            assert db.Bla.select().count() == 1
+    """)
 
-#     result = testdir.runpytest('-v')
+    result = testdir.runpytest('-v')
 
-#     # fnmatch_lines does an assertion internally
-#     result.stdout.fnmatch_lines([
-#         '*::test_1 PASSED*',
-#         '*::test_2 PASSED*',
-#     ])
+    # fnmatch_lines does an assertion internally
+    result.stdout.fnmatch_lines([
+        '*::test_1 PASSED*',
+        '*::test_2 PASSED*',
+    ])
 
-#     # make sure that that we get a '0' exit code for the testsuite
-#     assert result.ret == 0
+    # make sure that that we get a '0' exit code for the testsuite
+    assert result.ret == 0
 
 
 def test_plugin_commit_fiture_before_test(testdir):
@@ -234,6 +235,37 @@ def test_plugin_commit_fiture_before_test(testdir):
         @pytest.mark.pony
         def test_1(fixt):
             assert fixt.id == 1
+    """)
+
+    result = testdir.runpytest('-v')
+
+    # fnmatch_lines does an assertion internally
+    result.stdout.fnmatch_lines([
+        '*::test_1 PASSED*',
+    ])
+
+    # make sure that that we get a '0' exit code for the testsuite
+    assert result.ret == 0
+
+
+def test_remove_relation_not_saved(testdir):
+    testdir.makeini("""
+        [pytest]
+        PONY_DB=tests.app
+    """)
+
+    testdir.makepyfile("""
+        import pytest
+        from tests.app import db
+        from pony import orm
+
+        @pytest.fixture(scope='function')
+        def bla(request):
+            return db.Bla(name="something")
+
+        @pytest.mark.pony
+        def test_1(bla):
+            b = db.Ble(bla=bla, name="aha")
     """)
 
     result = testdir.runpytest('-v')
