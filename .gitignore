@@ -79,3 +79,4 @@ Pipfile.lock
 *.sublime-project
 *.sublime-workspace
 db.sqlite
+.env
