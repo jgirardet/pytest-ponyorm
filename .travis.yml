@@ -2,6 +2,12 @@ language: python
 
 sudo: enabled
 
+env:
+  - PG_PONY_DB=postgres://j:@localhost:5432/pytestponyorm
+
+before_script:
+  - psql -c 'create database pytestponyorm;' -U postgres
+
 matrix:
     include:
       - python: 3.5
