@@ -6,6 +6,7 @@ from pony import orm
 db = orm.Database()
 
 
+
 class Bla(db.Entity):
     name = orm.Required(str)
     champs = orm.Optional(str)
@@ -29,21 +30,7 @@ class Ble(db.Entity):
 
 
 def bind_db(db):
-    bdb = os.environ['DB_PROVIDER']
-    if bdb == "sqlite":
-        db.bind(provider='sqlite', filename=':memory:')
-    elif bdb == "postgres":
-        url = urlparse(os.environ['PG_PONY_DB'])
-        db.bind(
-            provider=url.scheme,
-            host=url.hostname,
-            database=url.path.strip('/'),
-            user=url.username,
-            password=url.password,
-            port=url.port,
-            # create_tables=True,
-            )
 
-bind_db(db)
+db = bind_db(db)
 
-db.generate_mapping(create_tables=True)
+# db.generate_mapping(create_tables=True)
