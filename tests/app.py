@@ -1,10 +1,32 @@
 import os
-from urllib.parse import urlparse
 
 from pony import orm
 
 db = orm.Database()
 
+mode = os.environ['MYPROJECT_MODE']
+
+if mode == "memory":
+    DB_PARAMS = {
+        "provider": "sqlite",
+        "filename": ":memory:",
+        # "create_db":True,
+    }
+elif mode == "sqlite":
+    DB_PARAMS = {
+        "provider": "sqlite",
+        "filename": "/tmp/sqlite.db",
+        "create_db": True,
+    }
+elif mode == "pgsql":
+    DB_PARAMS = {
+        'provider': 'postgres',
+        'database': 'pytestponyorm',
+        'host': 'localhost',
+        'port': 5432,
+        'user': 'j',
+        'password': 'j'
+    }
 
 
 class Bla(db.Entity):
@@ -15,7 +37,7 @@ class Bla(db.Entity):
     def update(self):
         self.champs = "LALA"
 
- 
+
 class Ble(db.Entity):
     name = orm.Required(str)
     bla = orm.Required(Bla)
@@ -27,10 +49,6 @@ class Ble(db.Entity):
         self.bla.update()
 
 
+db.bind(**DB_PARAMS)
 
-
-def bind_db(db):
-
-db = bind_db(db)
-
-# db.generate_mapping(create_tables=True)
+db.generate_mapping(create_tables=True)

@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import importlib
+
 import pytest
 from pony import orm
 
 
-
 def _pg_reset_sequences(db):
-    sequences = db.execute('SELECT sequence_name FROM information_schema.sequences;').fetchall()
+    # with orm.db_session():
+    sequences = db.execute(
+        'SELECT sequence_name FROM information_schema.sequences;').fetchall()
     for item in sequences:
-        req = 'ALTER sequence %s RESTART'.format(item[0])
-        db.execute('ALTER sequence bla_id_seq RESTART;')
-    db.commit()
+        req = 'ALTER sequence {0} RESTART'.format(item[0])
+        db.execute(req)
 
 
 def pytest_addoption(parser):
@@ -67,26 +68,23 @@ def pytest_runtest_teardown(item, nextitem):
 
     # import test db
     db = ponydb(item)
-    provider =  db.provider.dialect
+    provider = db.provider.dialect
 
     if marker:
         # delete all entries from db at end of test
-        if marker.kwargs.get(
-                'reset_db',
-                True):  # unless @pytest.mark.pony(reset_db=False) is specified
+        # unless @pytest.mark.pony(reset_db=False) is specified
+        if marker.kwargs.get('reset_db', True):
             orm.rollback(
             )  # clear possible uncommited things before delete so the base is Ok. Not good with
             # commit
             for entity in db.entities.values():
                 orm.delete(e for e in entity)
 
-                # [e.delete() for e in entity.select()[:]]
+            # reset sequence : postres support
             if provider == 'PostgreSQL':
                 _pg_reset_sequences(db)
-
         # delete or not the db_session is closed
         orm.db_session.__exit__()
-
 
 
 @pytest.fixture(scope='session')

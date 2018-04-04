@@ -1,33 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# def tesst_bar_fixture(testdir):
-#     """Make sure that pytest accepts our fixture."""
-
-#     # create a temporary pytest test module
-#     testdir.makepyfile("""
-#         def tesst_sth(bar):
-#             assert bar == "europython2015"
-#     """)
-
-#     # run pytest with the following cmd args
-#     result = testdir.runpytest('--foo=europython2015', '-v')
-
-#     # fnmatch_lines does an assertion internally
-#     result.stdout.fnmatch_lines([
-#         '*::tesst_sth PASSED*',
-#     ])
-
-#     # make sure that that we get a '0' exit code for the testsuite
-#     assert result.ret == 0
-
-# def tesst_help_message(testdir):
-#     result = testdir.runpytest('--help', )
-#     # fnmatch_lines does an assertion internally
-#     result.stdout.fnmatch_lines([
-#         'ponyorm:',
-#         '*--foo=DEST_FOO*Set the value for the fixture "bar".',
-#     ])
-
 
 def test_ponydb_(testdir):
     testdir.makeini("""
@@ -277,6 +249,7 @@ def test_remove_relation_not_saved(testdir):
 
     # make sure that that we get a '0' exit code for the testsuite
     assert result.ret == 0
+
 
 def test_reset_sequence_pgsql(testdir):
     testdir.makeini("""
