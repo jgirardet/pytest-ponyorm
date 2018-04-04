@@ -13,17 +13,16 @@ branches:
   - master
   - dev
 
-python:
-  - "3.5"
-  - "3.6"
-  
+python: "3.5"
 env:
-  matrix:
     - TOXENV=py35-sqlite
-    - TOXENV=py36-sqlite
     - TOXENV=py35-pgsql
-    - TOXENV=py36-pgsql
     - TOXENV=flake8
+
+python: "3.6"
+env:
+    - TOXENV=py36-sqlite
+    - TOXENV=py36-pgsql
 
 install:
   - pip install tox
