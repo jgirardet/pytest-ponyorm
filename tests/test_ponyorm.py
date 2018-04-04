@@ -1,33 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# def tesst_bar_fixture(testdir):
-#     """Make sure that pytest accepts our fixture."""
-
-#     # create a temporary pytest test module
-#     testdir.makepyfile("""
-#         def tesst_sth(bar):
-#             assert bar == "europython2015"
-#     """)
-
-#     # run pytest with the following cmd args
-#     result = testdir.runpytest('--foo=europython2015', '-v')
-
-#     # fnmatch_lines does an assertion internally
-#     result.stdout.fnmatch_lines([
-#         '*::tesst_sth PASSED*',
-#     ])
-
-#     # make sure that that we get a '0' exit code for the testsuite
-#     assert result.ret == 0
-
-# def tesst_help_message(testdir):
-#     result = testdir.runpytest('--help', )
-#     # fnmatch_lines does an assertion internally
-#     result.stdout.fnmatch_lines([
-#         'ponyorm:',
-#         '*--foo=DEST_FOO*Set the value for the fixture "bar".',
-#     ])
-
 
 def test_ponydb_(testdir):
     testdir.makeini("""
@@ -198,7 +170,6 @@ def test_pony_marker_dont_drop_table(testdir):
             assert db.Bla.select().count() == 3
 
         def test_2(request):
-            print(request.node.get_marker('pony'))
             a = db.Bla(name="omkmok")
             assert db.Bla.select().count() == 4
     """)
@@ -274,6 +245,47 @@ def test_remove_relation_not_saved(testdir):
     # fnmatch_lines does an assertion internally
     result.stdout.fnmatch_lines([
         '*::test_1 PASSED*',
+    ])
+
+    # make sure that that we get a '0' exit code for the testsuite
+    assert result.ret == 0
+
+
+def test_reset_sequence_pgsql(testdir):
+    testdir.makeini("""
+        [pytest]
+        PONY_DB=tests.app
+    """)
+
+    testdir.makepyfile("""
+        import pytest
+        from tests.app import db
+        from pony import orm
+
+        pytestmark = pytest.mark.pony
+
+
+        def test_1():
+            a = db.Bla(name="omkmok")
+            a.flush()
+            assert a.id == 1
+
+        def test_2(ponydb):
+            # print(ponydb.execute("select * from sqlite_sequence").fetchall())
+            a = db.Bla(name="omkmok")
+            a.flush()
+            # print(ponydb.execute("select * from sqlite_sequence").fetchall())
+
+            assert a.id == 1
+            # assert False
+    """)
+
+    result = testdir.runpytest('-v')
+
+    # fnmatch_lines does an assertion internally
+    result.stdout.fnmatch_lines([
+        '*::test_1 PASSED*',
+        '*::test_2 PASSED*',
     ])
 
     # make sure that that we get a '0' exit code for the testsuite

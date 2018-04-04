@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
 import codecs
+import os
+
 from setuptools import setup
 
 
@@ -13,7 +14,7 @@ def read(fname):
 
 setup(
     name='pytest-ponyorm',
-    version='0.3.0',
+    version='0.3.1',
     author='Jimmy Girardet',
     author_email='ijkl@netc.fr',
     maintainer='Jimmy Girardet',
@@ -41,5 +42,4 @@ setup(
         'pytest11': [
             'ponyorm = pytest_ponyorm',
         ],
-    },
-)
+    }, )

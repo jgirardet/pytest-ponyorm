@@ -99,7 +99,11 @@ About Reseting Database:
 -------------------------
 Test database tables are dropped/recreate before the test SESSION.
 
-Initialy this plugin did drop/recreate table  for each test. Due tu perfomance reason, this has changed. Now tables are cleared but not dropped. This means that some things like auto PrimaryKey won't start at 1 for each test. This has to be considered when writing tests.
+Initialy this plugin did drop/recreate table  for each test. Due tu perfomance reason, this has changed. Now tables are cleared but not dropped. 
+
+
+Sql sequences like  "auto PrimaryKey"  will also be reseted but actually, it's only supported for PostreSQL and Sqlite. For other databases, Primarikey might not start at 1 for each test. This has to be considered when writing tests.
+
 
 
 About Fixtures :
@@ -127,14 +131,21 @@ If you encounter any problems, please `file an issue`_ along with a detailed des
 
 Changelog
 ----------
+0.3.1 :
+    - sql sequence reset for postgre and sqlite
+    - testing py35/36 and pg/sqlite
 0.3.0 :     
     - made faster with just deleting database entries after each test
     - no drop/recreate
     - db_session splitted into 2 hooks, not anymore in a fixture
-0.2.9 : add fixture autocommit before run test
-0.2.0 : add marker
-0.1.5 : add db_session for each test
-0.1.0 : auto clear database
+0.2.9 :
+    - add fixture autocommit before run test
+0.2.0 :
+    - add marker
+0.1.5 :
+    - add db_session for each test
+0.1.0 :
+    - auto clear database
 
 
 .. _`Cookiecutter`: https://github.com/audreyr/cookiecutter

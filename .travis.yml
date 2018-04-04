@@ -2,24 +2,38 @@ language: python
 
 sudo: enabled
 
-matrix:
-    include:
-      - python: 3.5
-        env: TOX_ENV=py35
-      - python: 3.6
-        env: TOX_ENV=py36
-      - python: 3.6
-        env: TOX_ENV=flake8
+
+before_script:
+  - psql -c 'create database pytestponyorm;' -U postgres
+  - psql -c "CREATE USER j WITH PASSWORD 'j;'" -U postgres
+  - psql -c "GRANT ALL ON DATABASE pytestponyorm TO j;" -U postgres
 
 branches:
   only:
   - master
+  - dev
+matrix:
+  include:
+    - python: 3.5
+      env: TOXENV=py35-sqlite
+    - python: 3.5
+      env: TOXENV=py35-pgsql
+    - python: 3.5
+      env: TOXENV=flake8
+
+    - python: 3.6
+      env: TOXENV=py36-sqlite
+    - python: 3.6
+      env: TOXENV=py36-pgsql
+    - python: 3.6
+      env: TOXENV=flake8
+
 
 install:
   - pip install tox
 
 script:
-  - tox -e $TOX_ENV
+  - tox -e $TOXENV
 
 before_cache:
   - rm -rf $HOME/.cache/pip/log

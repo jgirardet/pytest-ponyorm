@@ -1,2 +1,3 @@
 pytest
 pony
+psycopg2-binary
