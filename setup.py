@@ -14,7 +14,7 @@ def read(fname):
 
 setup(
     name='pytest-ponyorm',
-    version='0.3.0',
+    version='0.3.1',
     author='Jimmy Girardet',
     author_email='ijkl@netc.fr',
     maintainer='Jimmy Girardet',
@@ -42,5 +42,4 @@ setup(
         'pytest11': [
             'ponyorm = pytest_ponyorm',
         ],
-    },
-)
+    }, )
