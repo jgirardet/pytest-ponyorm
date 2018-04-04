@@ -6,16 +6,7 @@ sudo: enabled
 before_script:
   - psql -c 'create database pytestponyorm;' -U postgres
   - psql -c "CREATE USER j WITH PASSWORD 'j;'" -U postgres
-  - psql -c "GRANT ALL ON DATABASE pytestponyorm TO j;"
-
-matrix:
-    include:
-      - python: 3.5
-        env: TOX_ENV=py35
-      - python: 3.6
-        env: TOX_ENV=py36
-      - python: 3.6
-        env: TOX_ENV=flake8
+  - psql -c "GRANT ALL ON DATABASE pytestponyorm TO j;" -U postgres
 
 branches:
   only:
@@ -23,10 +14,10 @@ branches:
   - dev
 
 install:
-  - pip install tox
+  - pip install tox-travis
 
 script:
-  - tox -e $TOX_ENV
+  - tox
 
 before_cache:
   - rm -rf $HOME/.cache/pip/log
