@@ -16,12 +16,20 @@ branches:
 python:
   - "3.5"
   - "3.6"
+  
+env:
+  matrix:
+    - TOXENV=py35-sqlite
+    - TOXENV=py36-sqlite
+    - TOXENV=py35-pgsql
+    - TOXENV=py36-pgsql
+    - TOXENV=flake8
 
 install:
-  - pip install tox-travis
+  - pip install tox
 
 script:
-  - tox
+  - tox -e $TOXENV
 
 before_cache:
   - rm -rf $HOME/.cache/pip/log
