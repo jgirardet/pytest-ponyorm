@@ -27,10 +27,10 @@ shell:
 	pipenv run apistar shell
 
 sdist:
-	pipenv run python setup.py sdist
+	python setup.py sdist
 
 wheels:
-	pipenv run python setup.py bdist_wheel
+		python setup.py bdist_wheel
 
 test:
 	pipenv run pytest 
