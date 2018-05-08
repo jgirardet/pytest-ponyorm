@@ -57,8 +57,7 @@ def pytest_runtest_call(item):
     """
     marker = item.get_marker('pony')
     if marker:
-        orm.commit()
-
+        orm.flush()
 
 def pytest_runtest_teardown(item, nextitem):
     """
