@@ -51,7 +51,7 @@ You can install "pytest-ponyorm" via `pip`_ from `PyPI`_::
 Usage
 -----
 
-.. warning:: By default, database is cleared after each test. You must never use it in a production environnement. This plugin doesn't change the database config.It's you'job to create the testing environnement and change database params.
+.. warning:: By default, database is cleared after each test. You must never use it in a production environment. This plugin doesn't change the database config.It's you'job to create the testing environment and change database params.
 
 First, configure PONY_DB in pytest.ini. PonyORM main Database instance  module location must be specified in pytest.ini to make it work : for example if db is in /path/models/main.py, you must configure like this :
 
@@ -99,10 +99,10 @@ About Reseting Database:
 -------------------------
 Test database tables are dropped/recreate before the test SESSION.
 
-Initialy this plugin did drop/recreate table  for each test. Due tu perfomance reason, this has changed. Now tables are cleared but not dropped. 
+Initialy this plugin did drop/recreate table  for each test. Due to perfomance reason, this has changed. Now tables are cleared but not dropped. 
 
 
-Sql sequences like  "auto PrimaryKey"  will also be reseted but actually, it's only supported for PostreSQL and Sqlite. For other databases, Primarikey might not start at 1 for each test. This has to be considered when writing tests.
+Sql sequences like  "auto PrimaryKey"  will also be reset but actually, it's only supported for PostgreSQL and Sqlite. For other databases, Primarykey might not start at 1 for each test. This has to be considered when writing tests.
 
 
 
