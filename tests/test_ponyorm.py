@@ -308,7 +308,7 @@ def test_delete_fixture_error_with_reverse(testdir):
         from pony import orm
 
         pytestmark = pytest.mark.pony
-        
+
         def blafactory():
             return db.Bla(name="nomdebla")
 

@@ -59,6 +59,7 @@ def pytest_runtest_call(item):
     if marker:
         orm.flush()
 
+
 def pytest_runtest_teardown(item, nextitem):
     """
 
