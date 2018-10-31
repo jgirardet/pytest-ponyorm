@@ -48,7 +48,7 @@ def pytest_runtest_setup(item):
     """
     Before each marked test, db_session is enabled
     """
-    marker = item.get_marker("pony")
+    marker = item.get_closest_marker("pony")
     if marker:
         orm.db_session.__enter__()
 
@@ -57,7 +57,7 @@ def pytest_runtest_call(item):
     """
     The test starts by committing the uncommited fixture. Resolve None PK if uncommited
     """
-    marker = item.get_marker("pony")
+    marker = item.get_closest_marker("pony")
     if marker:
         orm.flush()
 
@@ -73,7 +73,7 @@ def pytest_runtest_teardown(item, nextitem):
     """
 
     """
-    marker = item.get_marker("pony")
+    marker = item.get_closest_marker("pony")
 
     # import test db
     db = _ponydb(item)
