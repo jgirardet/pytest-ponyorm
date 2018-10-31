@@ -18,15 +18,11 @@ matrix:
       env: TOXENV=py35-sqlite
     - python: 3.5
       env: TOXENV=py35-pgsql
-    - python: 3.5
-      env: TOXENV=flake8
 
     - python: 3.6
       env: TOXENV=py36-sqlite
     - python: 3.6
       env: TOXENV=py36-pgsql
-    - python: 3.6
-      env: TOXENV=flake8
 
 
 install:
