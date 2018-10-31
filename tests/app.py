@@ -4,7 +4,7 @@ from pony import orm
 
 db = orm.Database()
 
-mode = os.environ['MYPROJECT_MODE']
+mode = os.environ["MYPROJECT_MODE"]
 
 if mode == "memory":
     DB_PARAMS = {
@@ -13,26 +13,22 @@ if mode == "memory":
         # "create_db":True,
     }
 elif mode == "sqlite":
-    DB_PARAMS = {
-        "provider": "sqlite",
-        "filename": "/tmp/sqlite.db",
-        "create_db": True,
-    }
+    DB_PARAMS = {"provider": "sqlite", "filename": "/tmp/sqlite.db", "create_db": True}
 elif mode == "pgsql":
     DB_PARAMS = {
-        'provider': 'postgres',
-        'database': 'pytestponyorm',
-        'host': 'localhost',
-        'port': 5432,
-        'user': 'j',
-        'password': 'j'
+        "provider": "postgres",
+        "database": "pytestponyorm",
+        "host": "localhost",
+        "port": 5432,
+        "user": "j",
+        "password": "j",
     }
 
 
 class Bla(db.Entity):
     name = orm.Required(str)
     champs = orm.Optional(str)
-    bles = orm.Set('Ble')
+    bles = orm.Set("Ble")
 
     def update(self):
         self.champs = "LALA"

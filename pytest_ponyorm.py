@@ -64,7 +64,7 @@ def pytest_runtest_call(item):
 
 def _ponydb(item):
     """return db : test Database instance"""
-    db_path = item.config.getini("PONY_DB")
+    db_path = item.config.getini("PONY_DB")4
     db = importlib.import_module(db_path).db
     return db
 
