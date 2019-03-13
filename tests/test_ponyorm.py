@@ -73,7 +73,7 @@ def test_pony_marker_exist(testdir):
         pytestmark = pytest.mark.pony
 
         def test_marker_exist(request):
-            marker = request.keywords.get('pony', None)
+            marker = request.node.get_closest_marker('pony', None)
             assert marker.name == "pony"
     """
     )
