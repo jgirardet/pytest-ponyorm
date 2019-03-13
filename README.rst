@@ -76,7 +76,9 @@ Then just apply the pony marker :
 
 You can mark a class or function with @pytest.mark.pony or the whole module with pytestmark = pytest.mark.pony
 
-The marker *pony* takes one argument : *reset_db*, default is True. In this case the marked test doesn't reset the database at ending.
+The marker *pony* may takes as argument : 
+    - *reset_db*, default is True. In this case the marked test doesn't reset the database at ending.
+    - *db_session*, default is True. In this cas the db_session decorator will not be applied to test.
 
 .. code-block:: python
 	
@@ -91,9 +93,16 @@ The marker *pony* takes one argument : *reset_db*, default is True. In this case
 
     @pytest.mark.pony(reset_db=False)
     def test 3:
-    	pass
+        pass
 
     # test3 will use database in the state that test2 left it.
+
+    @pytest.mark.pony(db_session=False)
+    def test 3:
+        a = MyEntity()  # will fail
+        with db_session():
+            a = MyEntitty() # Ok
+
 
 About Reseting Database:
 -------------------------
@@ -131,6 +140,10 @@ If you encounter any problems, please `file an issue`_ along with a detailed des
 
 Changelog
 ----------
+1.0.0 :
+    - stop zero ver
+    - fix various bugs
+    - add db_session=False to pony marker
 0.3.1 :
     - sql sequence reset for postgre and sqlite
     - testing py35/36 and pg/sqlite

@@ -49,7 +49,7 @@ def pytest_runtest_setup(item):
     Before each marked test, db_session is enabled
     """
     marker = item.get_closest_marker("pony")
-    if marker:
+    if marker and marker.kwargs.get("db_session", True):
         orm.db_session.__enter__()
 
 
@@ -82,6 +82,10 @@ def pytest_runtest_teardown(item, nextitem):
     if marker:
         # delete all entries from db at end of test
         # unless @pytest.mark.pony(reset_db=False) is specified
+
+        if not marker.kwargs.get("db_session", True):
+            orm.db_session.__enter__()
+
         if marker.kwargs.get("reset_db", True):
             orm.rollback()  # clear possible uncommited things before delete so the base is Ok. Not good with
             # commit
