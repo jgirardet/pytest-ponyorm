@@ -30,9 +30,9 @@ def pytest_configure(config):
     setup database and marker before session
     """
 
-    # add marker to apply db_sesssion to test
+    # add marker to apply db_session to test
     config.addinivalue_line(
-        "markers", "pony: mark a test with use of db_sesion and reset db "
+        "markers", "pony: mark a test with use of db_session and reset db "
     )
 
     # import test_database and reset it then create a fresh new database.
@@ -49,17 +49,21 @@ def pytest_runtest_setup(item):
     Before each marked test, db_session is enabled
     """
     marker = item.get_closest_marker("pony")
-    if marker:
+    if marker and marker.kwargs.get("db_session", True):
         orm.db_session.__enter__()
 
 
 def pytest_runtest_call(item):
     """
-    The test starts by committing the uncommited fixture. Resolve None PK if uncommited
+    The test starts by committing the uncommitted fixture. Resolve None PK if uncommitted
     """
     marker = item.get_closest_marker("pony")
     if marker:
-        orm.flush()
+        if marker.kwargs.get("db_session", True):
+            orm.flush()
+        else:
+            with orm.db_session:
+                orm.flush()
 
 
 def _ponydb(item):
@@ -80,15 +84,17 @@ def pytest_runtest_teardown(item, nextitem):
     provider = db.provider.dialect
 
     if marker:
+        if not marker.kwargs.get("db_session", True):
+            orm.db_session.__enter__()
         # delete all entries from db at end of test
         # unless @pytest.mark.pony(reset_db=False) is specified
         if marker.kwargs.get("reset_db", True):
-            orm.rollback()  # clear possible uncommited things before delete so the base is Ok. Not good with
+            orm.rollback()  # clear possible uncommitted things before delete so the base is Ok. Not good with
             # commit
             for entity in db.entities.values():
                 orm.delete(e for e in entity)
 
-            # reset sequence : postres support
+            # reset sequence : postgres support
             if provider == "PostgreSQL":
                 _pg_reset_sequences(db)
         # delete or not the db_session is closed
