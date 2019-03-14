@@ -602,7 +602,7 @@ def test_delete_fixture_error_with_reverse_with_db_session_false(testdir):
     If a fixture is created using a factory for the
     relatioship it should not fail
     """
-    testdir.makeini(
+        testdir.makeini(
         """
         [pytest]
         PONY_DB=tests.app
@@ -614,7 +614,6 @@ def test_delete_fixture_error_with_reverse_with_db_session_false(testdir):
         import pytest
         from tests.app import db
         from pony import orm
-
         pytestmark = pytest.mark.pony(db_session=False)
 
         def blafactory():
@@ -630,16 +629,7 @@ def test_delete_fixture_error_with_reverse_with_db_session_false(testdir):
             with orm.db_session:
                 ble.delete()
                 assert ble.id
-
-        # def test_2(ponydb):
-        #     # print(ponydb.execute("select * from sqlite_sequence").fetchall())
-        #     a = db.Bla(name="omkmok")
-        #     a.flush()
-        #     # print(ponydb.execute("select * from sqlite_sequence").fetchall())
-
-        #     assert a.id == 1
-        #     # assert False
-    """
+      """
     )
 
     result = testdir.runpytest("-v")
@@ -653,4 +643,51 @@ def test_delete_fixture_error_with_reverse_with_db_session_false(testdir):
     )
 
     # make sure that that we get a '0' exit code for the testsuite
+    assert result.ret == 0
+
+def test_db_session_not_active_with_db_session_equal_false(testdir):
+
+    testdir.makeini(
+        """
+        [pytest]
+        PONY_DB=tests.app
+    """
+    )
+
+    testdir.makepyfile(
+        """
+        import pytest
+        from tests.app import db
+        from pony import orm
+        pytestmark = pytest.mark.pony
+
+        @pytest.mark.pony(db_session=False)
+        def test_1():
+            with pytest.raises(orm.TransactionError):
+                a = db.Bla(name="omkmok")
+        
+
+        def test_2(request):
+            a = db.Bla(name="omkmok")
+            assert a.name == "omkmok"
+      """
+    )
+
+    result = testdir.runpytest("-v")
+
+    # fnmatch_lines does an assertion internally
+
+    result.stdout.fnmatch_lines(
+        [
+            "*::test_1 PASSED*",
+            # '*::test_2 PASSED*',
+        ]
+    )
+
+    # make sure that that we get a '0' exit code for the testsuite
+
+    result.stdout.fnmatch_lines(["*::test_1 PASSED*", "*::test_2 PASSED*"])
+
+    # # make sure that that we get a '0' exit code for the testsuite
+
     assert result.ret == 0

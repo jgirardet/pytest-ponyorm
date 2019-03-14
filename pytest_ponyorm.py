@@ -88,6 +88,10 @@ def pytest_runtest_teardown(item, nextitem):
             orm.db_session.__enter__()
         # delete all entries from db at end of test
         # unless @pytest.mark.pony(reset_db=False) is specified
+
+        if not marker.kwargs.get("db_session", True):
+            orm.db_session.__enter__()
+
         if marker.kwargs.get("reset_db", True):
             orm.rollback()  # clear possible uncommitted things before delete so the base is Ok. Not good with
             # commit
